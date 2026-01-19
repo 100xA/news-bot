@@ -1,14 +1,15 @@
-# East Asian News Terminal Reader
+# News Terminal Reader
 
-An interactive terminal-based news reader for East Asian news sources (Japan, South Korea, China).
+An interactive terminal-based news reader for international news sources and arXiv papers.
 
 ## Features
 
-- **14 Free News Sources** from Japan, Korea, China, and regional outlets
-- **Simple Arrow-Key Menu** for easy navigation
+- **17 Free News Sources** from Japan, Korea, China, Poland, Germany, and arXiv
+- **Simple Arrow-Key Menu** with curses-based interface
 - **Full Article Reader** with content extraction
-- **Smart Caching** for offline reading
-- **Async Fetching** for fast loading
+- **Smart Caching** with SQLite for offline reading
+- **Async Fetching** for fast parallel loading
+- **Morning Digest Scheduler** with launchd integration
 - **Configurable** sources and settings
 
 ## Installation
@@ -16,24 +17,23 @@ An interactive terminal-based news reader for East Asian news sources (Japan, So
 ### With uv (recommended)
 
 ```bash
-# Clone or navigate to the project
 cd news-bot
-
-# Install with uv
 uv sync
-
-# Run the app
 uv run news
 ```
 
 ### Install globally
 
 ```bash
-# Install as a tool
 uv tool install .
-
-# Now you can run from anywhere
 news
+```
+
+### Copy config to user directory
+
+```bash
+mkdir -p ~/.config/news-bot
+cp config.yaml ~/.config/news-bot/
 ```
 
 ## Usage
@@ -71,28 +71,45 @@ news --startup          # Brief summary (10 headlines)
 | `q` | Quit |
 | `Page Up/Dn` | Scroll article |
 
+## Morning Digest Scheduler
+
+Set up automatic daily news at 8 AM (macOS):
+
+```bash
+# Copy the launch agent
+cp com.newsbot.morning.plist ~/Library/LaunchAgents/
+
+# Load it
+launchctl load ~/Library/LaunchAgents/com.newsbot.morning.plist
+
+# Test it now
+launchctl start com.newsbot.morning
+```
+
+### Manage the scheduler
+
+```bash
+# Check status
+launchctl list | grep newsbot
+
+# Disable
+launchctl unload ~/Library/LaunchAgents/com.newsbot.morning.plist
+
+# Re-enable
+launchctl load ~/Library/LaunchAgents/com.newsbot.morning.plist
+```
+
+To change the time, edit the plist and update `Hour`/`Minute` values.
+
 ## Shell Integration
 
-### Auto-run on Terminal Startup
-
-Add to your `~/.zshrc` (or `~/.bashrc`):
+Add to your `~/.zshrc`:
 
 ```bash
-# Show news headlines on new terminal
+# Quick headlines on terminal startup
 news --startup
-```
 
-Or for interactive mode:
-
-```bash
-# Launch news reader on startup (uncomment to enable)
-# news
-```
-
-### Alias Shortcuts
-
-```bash
-# Add to ~/.zshrc
+# Aliases
 alias n='news'
 alias nh='news --headlines'
 alias nr='news --refresh'
@@ -100,8 +117,8 @@ alias nr='news --refresh'
 
 ## Configuration
 
-The config file is searched in this order:
-1. `./config.yaml` (current directory)
+Config file locations (searched in order):
+1. `./config.yaml`
 2. `~/.config/news-bot/config.yaml`
 3. `~/.news-bot/config.yaml`
 
@@ -123,59 +140,58 @@ sources:
 
 ### Disabling Sources
 
-Set `enabled: false` for any source you want to skip:
-
 ```yaml
-  - id: xinhua
-    name: Xinhua
-    ...
+  - id: some_source
+    name: Some Source
     enabled: false  # Won't fetch this source
 ```
 
-## Included Sources
+## Included Sources (17 free, no paywalls)
 
-### Japan
+### Japan (English)
 - NHK World
-- Kyodo News
-- The Mainichi
-- The Japan News
 - Japan Today
 
-### South Korea
+### South Korea (English)
 - Yonhap News
 - The Korea Herald
 - The Korea Times
-- Korea JoongAng Daily
 
-### China
-- Xinhua
-- CGTN
-- People's Daily
+### China (English)
 - China Daily
 
-### Regional
+### Poland (Polish)
+- TVN24
+- Gazeta.pl
+- Onet
+- Polsat News
+
+### Germany (German)
+- Tagesschau
+
+### arXiv (Academic)
+- Computer Science (cs)
+- Artificial Intelligence (cs.AI)
+- Machine Learning (cs.LG)
+- Statistical ML (stat.ML)
+- Quantitative Finance (q-fin)
+
+### Regional (English)
 - The Diplomat
 
 ## Data Storage
 
 - **Cache**: `~/.local/share/news-bot/articles.db`
-- **Config**: See Configuration section above
+- **Config**: `~/.config/news-bot/config.yaml`
+- **Scheduler**: `~/Library/LaunchAgents/com.newsbot.morning.plist`
 
 ## Development
 
 ```bash
-# Clone the repo
 git clone <repo-url>
 cd news-bot
-
-# Install dependencies
 uv sync
-
-# Run in development
 uv run news
-
-# Run tests (if any)
-uv run pytest
 ```
 
 ## License

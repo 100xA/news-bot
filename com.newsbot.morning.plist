@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.newsbot.morning</string>
+    
+    <key>ProgramArguments</key>
+    <array>
+        <string>/Applications/Ghostty.app/Contents/MacOS/ghostty</string>
+        <string>-e</string>
+        <string>/bin/zsh</string>
+        <string>-c</string>
+        <string>/Users/janbiernacki/.local/bin/news; read -k1</string>
+    </array>
+    
+    <key>StartCalendarInterval</key>
+    <dict>
+        <key>Hour</key>
+        <integer>8</integer>
+        <key>Minute</key>
+        <integer>0</integer>
+    </dict>
+    
+    <key>RunAtLoad</key>
+    <false/>
+</dict>
+</plist>
