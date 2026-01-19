@@ -2,6 +2,29 @@
 
 An interactive terminal-based news reader for international news sources and arXiv papers.
 
+## Quick Download (No Installation Required)
+
+Download the pre-built binary for your system from the [Releases page](../../releases/latest):
+
+| Platform | Download |
+|----------|----------|
+| macOS (Apple Silicon) | `news-macos-arm64` |
+| macOS (Intel) | `news-macos-amd64` |
+| Linux (x64) | `news-linux-amd64` |
+| Windows (x64) | `news-windows-amd64.exe` |
+
+```bash
+# macOS/Linux: Make executable and run
+chmod +x news-macos-arm64
+./news-macos-arm64
+
+# Or move to your PATH
+sudo mv news-macos-arm64 /usr/local/bin/news
+news
+```
+
+> **macOS Users**: If blocked by Gatekeeper, go to System Settings → Privacy & Security → click "Allow Anyway"
+
 ## Features
 
 - **17 Free News Sources** from Japan, Korea, China, Poland, Germany, and arXiv

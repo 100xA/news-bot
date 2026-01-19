@@ -22,4 +22,6 @@ build-backend = "hatchling.build"
 packages = ["src/news_bot"]
 
 [dependency-groups]
-dev = []
+dev = [
+    "pyinstaller>=6.18.0",
+]

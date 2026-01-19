@@ -1,0 +1,151 @@
+name: Build and Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version tag (e.g., v1.0.0)'
+        required: true
+        default: 'v0.1.0'
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        include:
+          - os: ubuntu-latest
+            artifact_name: news
+            asset_name: news-linux-amd64
+          - os: macos-latest
+            artifact_name: news
+            asset_name: news-macos-arm64
+          - os: macos-13
+            artifact_name: news
+            asset_name: news-macos-amd64
+          - os: windows-latest
+            artifact_name: news.exe
+            asset_name: news-windows-amd64.exe
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pyinstaller
+          pip install feedparser trafilatura httpx pyyaml
+
+      - name: Build executable
+        run: |
+          pyinstaller --onefile --name news src/news_bot/__main__.py
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.asset_name }}
+          path: dist/${{ matrix.artifact_name }}
+
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/') || github.event_name == 'workflow_dispatch'
+    
+    steps:
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+
+      - name: Display structure of downloaded files
+        run: ls -R artifacts
+
+      - name: Prepare release assets
+        run: |
+          mkdir -p release
+          # Move and rename artifacts
+          mv artifacts/news-linux-amd64/news release/news-linux-amd64
+          mv artifacts/news-macos-arm64/news release/news-macos-arm64
+          mv artifacts/news-macos-amd64/news release/news-macos-amd64
+          mv artifacts/news-windows-amd64.exe/news.exe release/news-windows-amd64.exe
+          # Make executables executable
+          chmod +x release/news-linux-amd64
+          chmod +x release/news-macos-arm64
+          chmod +x release/news-macos-amd64
+
+      - name: Get version
+        id: version
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "version=${{ github.event.inputs.version }}" >> $GITHUB_OUTPUT
+          else
+            echo "version=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.version.outputs.version }}
+          name: News Bot ${{ steps.version.outputs.version }}
+          draft: false
+          prerelease: false
+          generate_release_notes: true
+          files: |
+            release/news-linux-amd64
+            release/news-macos-arm64
+            release/news-macos-amd64
+            release/news-windows-amd64.exe
+          body: |
+            ## Installation
+            
+            Download the appropriate binary for your system:
+            
+            | Platform | File |
+            |----------|------|
+            | macOS (Apple Silicon) | `news-macos-arm64` |
+            | macOS (Intel) | `news-macos-amd64` |
+            | Linux (x64) | `news-linux-amd64` |
+            | Windows (x64) | `news-windows-amd64.exe` |
+            
+            ### macOS / Linux
+            
+            ```bash
+            # Download (example for Apple Silicon Mac)
+            curl -L -o news https://github.com/${{ github.repository }}/releases/download/${{ steps.version.outputs.version }}/news-macos-arm64
+            
+            # Make executable
+            chmod +x news
+            
+            # Move to PATH (optional)
+            sudo mv news /usr/local/bin/
+            
+            # Run
+            news
+            ```
+            
+            ### Windows
+            
+            1. Download `news-windows-amd64.exe`
+            2. Rename to `news.exe` (optional)
+            3. Run from command prompt or PowerShell
+            
+            ### First Run on macOS
+            
+            macOS may block the app. To allow it:
+            1. Try to run `./news`
+            2. Go to System Settings → Privacy & Security
+            3. Click "Allow Anyway" next to the blocked app message
+            4. Run `./news` again and click "Open"
