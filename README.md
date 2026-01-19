@@ -8,22 +8,42 @@ Download the pre-built binary for your system from the [Releases page](../../rel
 
 | Platform | Download |
 |----------|----------|
-| macOS (Apple Silicon) | `news-macos-arm64` |
-| macOS (Intel) | `news-macos-amd64` |
+| macOS (Intel & Apple Silicon) | `news-macos-universal` |
 | Linux (x64) | `news-linux-amd64` |
 | Windows (x64) | `news-windows-amd64.exe` |
 
-```bash
-# macOS/Linux: Make executable and run
-chmod +x news-macos-arm64
-./news-macos-arm64
+### macOS / Linux
 
-# Or move to your PATH
-sudo mv news-macos-arm64 /usr/local/bin/news
+```bash
+# Make executable and run
+chmod +x news-macos-universal   # or news-linux-amd64 on Linux
+./news-macos-universal
+
+# Or move to your PATH for easy access
+sudo mv news-macos-universal /usr/local/bin/news
 news
 ```
 
 > **macOS Users**: If blocked by Gatekeeper, go to System Settings → Privacy & Security → click "Allow Anyway"
+
+### Windows
+
+1. Download `news-windows-amd64.exe` from the [Releases page](../../releases/latest)
+2. Open **Command Prompt** or **PowerShell**
+3. Navigate to your Downloads folder:
+   ```powershell
+   cd Downloads
+   ```
+4. Run the app:
+   ```powershell
+   .\news-windows-amd64.exe
+   ```
+
+**Optional**: Add to PATH for easy access anywhere:
+1. Move `news-windows-amd64.exe` to a folder like `C:\Tools\`
+2. Rename it to `news.exe`
+3. Add `C:\Tools\` to your system PATH ([guide](https://www.architectryan.com/2018/03/17/add-to-the-path-on-windows-10/))
+4. Now you can just type `news` from any terminal
 
 ## Features
 

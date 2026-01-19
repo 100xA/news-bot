@@ -24,10 +24,7 @@ jobs:
             asset_name: news-linux-amd64
           - os: macos-latest
             artifact_name: news
-            asset_name: news-macos-arm64
-          - os: macos-13
-            artifact_name: news
-            asset_name: news-macos-amd64
+            asset_name: news-macos-universal
           - os: windows-latest
             artifact_name: news.exe
             asset_name: news-windows-amd64.exe
@@ -49,7 +46,13 @@ jobs:
           pip install pyinstaller
           pip install feedparser trafilatura httpx pyyaml
 
-      - name: Build executable
+      - name: Build executable (macOS universal)
+        if: runner.os == 'macOS'
+        run: |
+          pyinstaller --onefile --name news --target-arch universal2 src/news_bot/__main__.py
+
+      - name: Build executable (Linux/Windows)
+        if: runner.os != 'macOS'
         run: |
           pyinstaller --onefile --name news src/news_bot/__main__.py
 
@@ -78,13 +81,11 @@ jobs:
           mkdir -p release
           # Move and rename artifacts
           mv artifacts/news-linux-amd64/news release/news-linux-amd64
-          mv artifacts/news-macos-arm64/news release/news-macos-arm64
-          mv artifacts/news-macos-amd64/news release/news-macos-amd64
+          mv artifacts/news-macos-universal/news release/news-macos-universal
           mv artifacts/news-windows-amd64.exe/news.exe release/news-windows-amd64.exe
           # Make executables executable
           chmod +x release/news-linux-amd64
-          chmod +x release/news-macos-arm64
-          chmod +x release/news-macos-amd64
+          chmod +x release/news-macos-universal
 
       - name: Get version
         id: version
@@ -105,8 +106,7 @@ jobs:
           generate_release_notes: true
           files: |
             release/news-linux-amd64
-            release/news-macos-arm64
-            release/news-macos-amd64
+            release/news-macos-universal
             release/news-windows-amd64.exe
           body: |
             ## Installation
@@ -115,16 +115,15 @@ jobs:
             
             | Platform | File |
             |----------|------|
-            | macOS (Apple Silicon) | `news-macos-arm64` |
-            | macOS (Intel) | `news-macos-amd64` |
+            | macOS (Intel & Apple Silicon) | `news-macos-universal` |
             | Linux (x64) | `news-linux-amd64` |
             | Windows (x64) | `news-windows-amd64.exe` |
             
-            ### macOS / Linux
+            ### macOS
             
             ```bash
-            # Download (example for Apple Silicon Mac)
-            curl -L -o news https://github.com/${{ github.repository }}/releases/download/${{ steps.version.outputs.version }}/news-macos-arm64
+            # Download
+            curl -L -o news https://github.com/${{ github.repository }}/releases/download/${{ steps.version.outputs.version }}/news-macos-universal
             
             # Make executable
             chmod +x news
@@ -136,16 +135,18 @@ jobs:
             news
             ```
             
+            **First Run**: macOS may block the app. Go to System Settings → Privacy & Security → click "Allow Anyway"
+            
+            ### Linux
+            
+            ```bash
+            curl -L -o news https://github.com/${{ github.repository }}/releases/download/${{ steps.version.outputs.version }}/news-linux-amd64
+            chmod +x news
+            sudo mv news /usr/local/bin/
+            ```
+            
             ### Windows
             
             1. Download `news-windows-amd64.exe`
             2. Rename to `news.exe` (optional)
-            3. Run from command prompt or PowerShell
-            
-            ### First Run on macOS
-            
-            macOS may block the app. To allow it:
-            1. Try to run `./news`
-            2. Go to System Settings → Privacy & Security
-            3. Click "Allow Anyway" next to the blocked app message
-            4. Run `./news` again and click "Open"
+            3. Run from Command Prompt or PowerShell
