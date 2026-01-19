@@ -146,7 +146,7 @@ sources:
     enabled: false  # Won't fetch this source
 ```
 
-## Included Sources (17 free, no paywalls)
+## Included Sources (18 free, no paywalls)
 
 ### Japan (English)
 - NHK World
@@ -175,6 +175,9 @@ sources:
 - Machine Learning (cs.LG)
 - Statistical ML (stat.ML)
 - Quantitative Finance (q-fin)
+
+### Finance
+- BMO Economics
 
 ### Regional (English)
 - The Diplomat

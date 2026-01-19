@@ -124,6 +124,14 @@ sources:
     rss_url: https://rss.arxiv.org/rss/q-fin
     enabled: true
 
+  # ===== FINANCE (English, Free) =====
+  - id: bmo_economics
+    name: BMO Economics
+    country: Finance
+    url: https://newsroom.bmo.com/
+    rss_url: https://newsroom.bmo.com/economic-forecast?pagetemplate=rss
+    enabled: true
+
   # ===== REGIONAL (English, Free) =====
   - id: the_diplomat
     name: The Diplomat

@@ -14,6 +14,7 @@ class Country(Enum):
     POLAND = "Poland"
     GERMANY = "Germany"
     ACADEMIC = "Academic"
+    FINANCE = "Finance"
     REGIONAL = "Regional"
 
 

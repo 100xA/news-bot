@@ -123,6 +123,7 @@ class Menu:
             Country.POLAND,
             Country.GERMANY,
             Country.ACADEMIC,
+            Country.FINANCE,
             Country.REGIONAL,
         ]
         
@@ -133,6 +134,7 @@ class Menu:
             Country.POLAND: "[PL]",
             Country.GERMANY: "[DE]",
             Country.ACADEMIC: "[Ac]",
+            Country.FINANCE: "[$$]",
             Country.REGIONAL: "[--]",
         }
         
