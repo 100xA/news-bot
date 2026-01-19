@@ -1,0 +1,133 @@
+# News Bot Configuration
+# Free sources only (no paywalls)
+
+cache:
+  expiry_hours: 24
+  max_articles_per_source: 50
+
+sources:
+  # ===== JAPAN (English, Free) =====
+  - id: nhk_world
+    name: NHK World
+    country: Japan
+    url: https://www3.nhk.or.jp/nhkworld/en/news/
+    rss_url: https://www3.nhk.or.jp/rss/news/cat0.xml
+    enabled: true
+
+  - id: japan_today
+    name: Japan Today
+    country: Japan
+    url: https://japantoday.com/
+    rss_url: https://japantoday.com/feed
+    enabled: true
+
+  # ===== SOUTH KOREA (English, Free) =====
+  - id: yonhap
+    name: Yonhap News
+    country: South Korea
+    url: https://en.yna.co.kr/
+    rss_url: https://en.yna.co.kr/RSS/news.xml
+    enabled: true
+
+  - id: korea_herald
+    name: The Korea Herald
+    country: South Korea
+    url: http://www.koreaherald.com/
+    rss_url: http://www.koreaherald.com/rss_xml.php
+    enabled: true
+
+  - id: korea_times
+    name: The Korea Times
+    country: South Korea
+    url: https://www.koreatimes.co.kr/
+    rss_url: https://www.koreatimes.co.kr/www/rss/rss.xml
+    enabled: true
+
+  # ===== CHINA (English, Free) =====
+  - id: china_daily
+    name: China Daily
+    country: China
+    url: http://www.chinadaily.com.cn/
+    rss_url: https://www.chinadaily.com.cn/rss/world_rss.xml
+    enabled: true
+
+  # ===== POLAND (Polish, Free) =====
+  - id: tvn24
+    name: TVN24
+    country: Poland
+    url: https://tvn24.pl/
+    rss_url: https://tvn24.pl/najnowsze.xml
+    enabled: true
+
+  - id: gazeta
+    name: Gazeta.pl
+    country: Poland
+    url: https://wiadomosci.gazeta.pl/
+    rss_url: https://wiadomosci.gazeta.pl/pub/rss/wiadomosci.xml
+    enabled: true
+
+  - id: onet
+    name: Onet
+    country: Poland
+    url: https://wiadomosci.onet.pl/
+    rss_url: https://wiadomosci.onet.pl/.feed
+    enabled: true
+
+  - id: polsat_news
+    name: Polsat News
+    country: Poland
+    url: https://www.polsatnews.pl/
+    rss_url: https://www.polsatnews.pl/rss/wszystkie.xml
+    enabled: true
+
+  # ===== GERMANY (German, Free) =====
+  - id: tagesschau
+    name: Tagesschau
+    country: Germany
+    url: https://www.tagesschau.de/
+    rss_url: https://www.tagesschau.de/index~rss2.xml
+    enabled: true
+
+  # ===== ACADEMIC (arXiv, Free) =====
+  - id: arxiv_cs
+    name: arXiv CS
+    country: Academic
+    url: https://arxiv.org/list/cs/recent
+    rss_url: https://rss.arxiv.org/rss/cs
+    enabled: true
+
+  - id: arxiv_ai
+    name: arXiv AI
+    country: Academic
+    url: https://arxiv.org/list/cs.AI/recent
+    rss_url: https://rss.arxiv.org/rss/cs.AI
+    enabled: true
+
+  - id: arxiv_ml
+    name: arXiv ML
+    country: Academic
+    url: https://arxiv.org/list/cs.LG/recent
+    rss_url: https://rss.arxiv.org/rss/cs.LG
+    enabled: true
+
+  - id: arxiv_stat_ml
+    name: arXiv stat.ML
+    country: Academic
+    url: https://arxiv.org/list/stat.ML/recent
+    rss_url: https://rss.arxiv.org/rss/stat.ML
+    enabled: true
+
+  - id: arxiv_qfin
+    name: arXiv Q-Fin
+    country: Academic
+    url: https://arxiv.org/list/q-fin/recent
+    rss_url: https://rss.arxiv.org/rss/q-fin
+    enabled: true
+
+  # ===== REGIONAL (English, Free) =====
+  - id: the_diplomat
+    name: The Diplomat
+    country: Regional
+    url: https://thediplomat.com/
+    rss_url: https://thediplomat.com/feed/
+    enabled: true
